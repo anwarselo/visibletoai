@@ -14,7 +14,7 @@ export async function publishBusiness(businessId: string) {
   const supabase = getServiceSupabase();
 
   const { data: business, error: businessError } = await supabase
-    .from("businesses")
+    .from("majed_businesses")
     .select("*")
     .eq("id", businessId)
     .single();
@@ -28,7 +28,7 @@ export async function publishBusiness(businessId: string) {
   const extractedText = asset ? await extractAssetText(asset) : business.description || "";
 
   if (asset && extractedText) {
-    await supabase.from("assets").update({ ocr_text: extractedText }).eq("id", asset.id);
+    await supabase.from("majed_assets").update({ ocr_text: extractedText }).eq("id", asset.id);
   }
 
   const aboutText =
@@ -44,7 +44,7 @@ export async function publishBusiness(businessId: string) {
   const jsonld = jsonLdForBusiness({ ...business, description: aboutText }, env.BASE_URL);
 
   await supabase
-    .from("public_pages")
+    .from("majed_public_pages")
     .upsert(
       {
         business_id: business.id,
@@ -57,7 +57,7 @@ export async function publishBusiness(businessId: string) {
     );
 
   const indexResponse = await pingIndexNow(url);
-  await supabase.from("index_events").insert({
+  await supabase.from("majed_index_events").insert({
     business_id: business.id,
     url,
     event_type: "published",
@@ -71,7 +71,7 @@ export async function publishBusiness(businessId: string) {
 async function fetchLatestAsset(businessId: string): Promise<Asset | null> {
   const supabase = getServiceSupabase();
   const { data, error } = await supabase
-    .from("assets")
+    .from("majed_assets")
     .select("*")
     .eq("business_id", businessId)
     .order("created_at", { ascending: false })

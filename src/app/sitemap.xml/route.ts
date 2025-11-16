@@ -4,7 +4,7 @@ import { getServiceSupabase } from "@/lib/supa";
 export async function GET() {
   const supabase = getServiceSupabase();
   const { data } = await supabase
-    .from("public_pages")
+    .from("majed_public_pages")
     .select("url,last_published_at")
     .order("last_published_at", { ascending: false })
     .limit(5000);

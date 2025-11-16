@@ -8,8 +8,8 @@ type Params = {
 export default async function BusinessPage({ params }: Params) {
   const supabase = getServiceSupabase();
   const { data, error } = await supabase
-    .from("businesses")
-    .select("*, public_pages(*)")
+    .from("majed_businesses")
+    .select("*, public_pages:majed_public_pages(*)")
     .eq("slug", params.slug)
     .single();
 

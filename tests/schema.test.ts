@@ -7,10 +7,10 @@ const schema = readFileSync(schemaPath, "utf8");
 
 describe("Supabase schema", () => {
   it("includes all required tables", () => {
-    expect(schema).toContain("create table if not exists businesses");
-    expect(schema).toContain("create table if not exists assets");
-    expect(schema).toContain("create table if not exists public_pages");
-    expect(schema).toContain("create table if not exists index_events");
+    expect(schema).toContain("create table if not exists majed_businesses");
+    expect(schema).toContain("create table if not exists majed_assets");
+    expect(schema).toContain("create table if not exists majed_public_pages");
+    expect(schema).toContain("create table if not exists majed_index_events");
   });
 });
 

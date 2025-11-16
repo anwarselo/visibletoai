@@ -40,7 +40,7 @@ export async function POST(request: Request) {
   const slug = generateSlug(name);
 
   const { data: business, error: bizError } = await supabase
-    .from("businesses")
+    .from("majed_businesses")
     .insert({ name, slug })
     .select("*")
     .single();
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: upload.error.message }, { status: 500 });
   }
 
-  const assetInsert = await supabase.from("assets").insert({
+  const assetInsert = await supabase.from("majed_assets").insert({
     business_id: business.id,
     file_path: storagePath,
     mime_type: file.type,
