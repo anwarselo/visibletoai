@@ -14,7 +14,7 @@ export async function publishBusiness(businessId: string) {
   const supabase = getServiceSupabase();
 
   const { data: business, error: businessError } = await supabase
-    .from("majed_businesses")
+    .from("visibletoai_businesses")
     .select("*")
     .eq("id", businessId)
     .single();
@@ -28,7 +28,7 @@ export async function publishBusiness(businessId: string) {
   const extractedText = asset ? await extractAssetText(asset) : business.description || "";
 
   if (asset && extractedText) {
-    await supabase.from("majed_assets").update({ ocr_text: extractedText }).eq("id", asset.id);
+    await supabase.from("visibletoai_assets").update({ ocr_text: extractedText }).eq("id", asset.id);
   }
 
   const aboutText =
@@ -45,7 +45,7 @@ export async function publishBusiness(businessId: string) {
 
   // Check if page already exists
   const { data: existingPage } = await supabase
-    .from("majed_public_pages")
+    .from("visibletoai_public_pages")
     .select("id")
     .eq("business_id", business.id)
     .single();
@@ -56,7 +56,7 @@ export async function publishBusiness(businessId: string) {
   if (existingPage) {
     // Update existing page
     const result = await supabase
-      .from("majed_public_pages")
+      .from("visibletoai_public_pages")
       .update({
         url,
         html_render: html,
@@ -70,7 +70,7 @@ export async function publishBusiness(businessId: string) {
   } else {
     // Insert new page
     const result = await supabase
-      .from("majed_public_pages")
+      .from("visibletoai_public_pages")
       .insert({
         business_id: business.id,
         url,
@@ -91,7 +91,7 @@ export async function publishBusiness(businessId: string) {
   console.log("Published page:", pageData);
 
   const indexResponse = await pingIndexNow(url);
-  await supabase.from("majed_index_events").insert({
+  await supabase.from("visibletoai_index_events").insert({
     business_id: business.id,
     url,
     event_type: "published",
@@ -105,7 +105,7 @@ export async function publishBusiness(businessId: string) {
 async function fetchLatestAsset(businessId: string): Promise<Asset | null> {
   const supabase = getServiceSupabase();
   const { data, error } = await supabase
-    .from("majed_assets")
+    .from("visibletoai_assets")
     .select("*")
     .eq("business_id", businessId)
     .order("created_at", { ascending: false })

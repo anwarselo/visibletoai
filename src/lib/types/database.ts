@@ -46,7 +46,7 @@ export type IndexEvent = {
 export interface Database {
   public: {
     Tables: {
-      majed_businesses: {
+      visibletoai_businesses: {
         Row: Business;
         Insert: Partial<Omit<Business, "id" | "created_at" | "updated_at">> & {
           slug: string;
@@ -54,7 +54,7 @@ export interface Database {
         };
         Update: Partial<Business>;
       };
-      majed_assets: {
+      visibletoai_assets: {
         Row: Asset;
         Insert: Partial<Omit<Asset, "id" | "created_at">> & {
           business_id: string;
@@ -63,7 +63,7 @@ export interface Database {
         };
         Update: Partial<Asset>;
       };
-      majed_public_pages: {
+      visibletoai_public_pages: {
         Row: PublicPage;
         Insert: Partial<Omit<PublicPage, "id" | "last_published_at">> & {
           business_id: string;
@@ -73,7 +73,7 @@ export interface Database {
         };
         Update: Partial<PublicPage>;
       };
-      majed_index_events: {
+      visibletoai_index_events: {
         Row: IndexEvent;
         Insert: Partial<Omit<IndexEvent, "id" | "created_at">> & {
           url: string;
