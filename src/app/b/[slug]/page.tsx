@@ -2,15 +2,16 @@ import { notFound } from "next/navigation";
 import { getServiceSupabase } from "@/lib/supa";
 
 type Params = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export default async function BusinessPage({ params }: Params) {
+  const { slug } = await params;
   const supabase = getServiceSupabase();
   const { data, error } = await supabase
     .from("majed_businesses")
     .select("*, public_pages:majed_public_pages(*)")
-    .eq("slug", params.slug)
+    .eq("slug", slug)
     .single();
 
   if (error || !data) {
