@@ -26,7 +26,7 @@ create table if not exists majed_assets (
 
 create table if not exists majed_public_pages (
   id uuid primary key default uuid_generate_v4(),
-  business_id uuid not null references majed_businesses(id) on delete cascade,
+  business_id uuid not null unique references majed_businesses(id) on delete cascade,
   url text not null,
   html_render text not null,
   jsonld jsonb not null,
