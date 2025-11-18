@@ -28,23 +28,28 @@ export async function summarizeText(input: string): Promise<string> {
   }
 
   const limited = trimmed.slice(0, 6000);
-  const response = await client.responses.create({
-    model: env.LLM_MODEL_NAME,
-    temperature: env.LLM_TEMPERATURE,
-    max_output_tokens: env.LLM_MAX_TOKENS,
-    input: [
-      {
-        role: "system",
-        content:
-          "You rewrite business descriptions into short, factual paragraphs suitable for a microsite. Keep headings or bullet points when provided.",
-      },
-      {
-        role: "user",
-        content: limited,
-      },
-    ],
-  });
+  
+  try {
+    const response = await client.chat.completions.create({
+      model: env.LLM_MODEL_NAME,
+      max_tokens: env.LLM_MAX_TOKENS,
+      messages: [
+        {
+          role: "system",
+          content:
+            "You rewrite business descriptions into short, factual paragraphs suitable for a microsite. Keep headings or bullet points when provided.",
+        },
+        {
+          role: "user",
+          content: limited,
+        },
+      ],
+    });
 
-  return response.output_text?.trim() || trimmed;
+    return response.choices[0]?.message?.content?.trim() || trimmed;
+  } catch (error) {
+    console.warn("LLM summarization failed, returning raw text:", error);
+    return trimmed;
+  }
 }
 
