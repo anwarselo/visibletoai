@@ -21,7 +21,6 @@ const envSchema = z
     TESSERACT_PATH: z.string().optional(),
     OPENAI_API_KEY: z.string().optional(),
     LLM_MODEL_NAME: z.string().default("gpt-5-mini"),
-    LLM_TEMPERATURE: z.coerce.number().min(0).max(2).default(0),
     LLM_MAX_TOKENS: z.coerce.number().int().positive().default(2048),
     INDEXNOW_KEY: z.string().optional(),
     INDEXNOW_KEY_PATH: z.string().optional(),
