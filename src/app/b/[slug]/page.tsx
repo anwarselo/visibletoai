@@ -86,9 +86,10 @@ export default async function BusinessPage({ params }: Params) {
     notFound();
   }
 
-  const page = data.public_pages?.[0];
+  // Since business_id has a UNIQUE constraint, Supabase returns a single object, not an array
+  const page = data.public_pages;
 
-  if (!page) {
+  if (!page || typeof page !== "object") {
     return (
       <main className="page">
         <section className="card">
